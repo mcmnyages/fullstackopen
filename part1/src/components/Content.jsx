@@ -1,9 +1,17 @@
 const Content = (props) => {
     return (
         <div>
-            <p>{props.part} {props.excercise}</p>
+            <Part part={props.part1} exercises={props.exercises1} />
+            <Part part={props.part2} exercises={props.exercises2} />
+            <Part part={props.part3} exercises={props.exercises3} />
         </div>
     )
 }
 
 export default Content;
+
+const Part = (props) => {
+    return (
+        <p>{props.part} {props.exercises}</p>
+    )
+}
