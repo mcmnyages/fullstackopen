@@ -1,33 +1,21 @@
-import Header from './components/Header'
-import Content from './components/Content'
-import Total from './components/Total'
-
+import { useState } from "react"
 const App = () => {
-  const course = 'Half Stack application development'
-  const parts = [
-    {
-    name:'Fundamentals of react',
-    excersises:10
-  },
-{
-    name:'Usings props to pass data',
-    excersises:7
-  },
-   {
-    name:'State of a component',
-    excersises:14
-   }
-  ]
-const total= parts[0].excersises+parts[1].excersises+parts[2].excersises;
+  const [value, setValue] = useState(10)
+  
+
+  const setToValue = (newValue) => () => {
+    console.log('value now', newValue)  // print the new value to console
+    setValue(newValue)
+  }
+  
   return (
     <div>
-      <Header course={course} />
-      <Content
-       parts={parts}
-      />
-      <Total total={total}/>
+      {value}
+
+      <button onClick={setToValue(1000)}>thousand</button>
+      <button onClick={setToValue(0)}>reset</button>
+      <button onClick={setToValue(value + 1)}>increment</button>
     </div>
   )
 }
-
-export default App
+export default App;
