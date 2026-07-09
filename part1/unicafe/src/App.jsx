@@ -16,13 +16,17 @@ const Statistics =(props)=>{
   const average = (props.good-props.bad)/total
   return(
     <div>
-      <h1>Statistics</h1>
+     {total >0 && 
+     <div>
+     <h1>Statistics</h1>
       <p>Good:{props.good}</p>
       <p>Neutral: {props.neutral}</p>
       <p>Bad: {props.bad}</p>
       <p>All: {total}</p>
-      <p>Average: {average}</p>
-      <p>Positive:{positive}%</p>
+      <p>Average: {Number(average)}</p>
+      <p>Positive:{Number(positive)}%</p>
+    </div>}
+    {total ===0 && <div>No feedback given</div>}
     </div>
   )
 }
