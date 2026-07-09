@@ -8,15 +8,15 @@ const Button = (props) =>{
     <button onClick={props.onClick} >{props.text}</button>
   )
 }
-const StatisticsLine =(props)=>{
-  console.log('Props in StatsLine',props)
-  return(
-    <div>
-      <p>
-        {props.text} {props.item}
-        {props.text==='Positive' && '%'}
-      </p>
-    </div>
+const StatisticsLine = (props) => {
+  return (
+    <tr>
+      <td>{props.text}</td>
+      <td>
+        {props.item}
+        {props.text === 'Positive' && '%'}
+      </td>
+    </tr>
   )
 }
 
@@ -26,19 +26,23 @@ const Statistics =(props)=>{
   const positive =(props.good/total)*100
   const average = (props.good-props.bad)/total
   return(
-    <div>
+    <>
      {total >0 && 
      <div>
      <h1>Statistics</h1>
+     <table>
+      <tbody>
       <StatisticsLine text={'Good'} item={props.good}/>
       <StatisticsLine text={'Neutral'} item={props.neutral}/>
       <StatisticsLine text={'Bad'} item={props.bad}/>
       <StatisticsLine text={'All'} item={total}/>
       <StatisticsLine text={'Average'} item={average}/>
       <StatisticsLine text={'Positive'} item={positive}/>
+      </tbody>
+      </table>
     </div>}
     {total ===0 && <div>No feedback given</div>}
-    </div>
+    </>
   )
 }
 
