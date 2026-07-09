@@ -11,12 +11,18 @@ const Button = (props) =>{
 
 const Statistics =(props)=>{
   // console.log("Props in stats",props)
+  const total=props.good + props.neutral + props.bad
+  const positive =(props.good/total)*100
+  const average = (props.good-props.bad)/total
   return(
     <div>
       <h1>Statistics</h1>
       <p>Good:{props.good}</p>
       <p>Neutral: {props.neutral}</p>
       <p>Bad: {props.bad}</p>
+      <p>All: {total}</p>
+      <p>Average: {average}</p>
+      <p>Positive:{positive}%</p>
     </div>
   )
 }
