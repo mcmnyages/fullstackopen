@@ -8,6 +8,17 @@ const Button = (props) =>{
     <button onClick={props.onClick} >{props.text}</button>
   )
 }
+const StatisticsLine =(props)=>{
+  console.log('Props in StatsLine',props)
+  return(
+    <div>
+      <p>
+        {props.text} {props.item}
+        {props.text==='Positive' && '%'}
+      </p>
+    </div>
+  )
+}
 
 const Statistics =(props)=>{
   // console.log("Props in stats",props)
@@ -19,12 +30,12 @@ const Statistics =(props)=>{
      {total >0 && 
      <div>
      <h1>Statistics</h1>
-      <p>Good:{props.good}</p>
-      <p>Neutral: {props.neutral}</p>
-      <p>Bad: {props.bad}</p>
-      <p>All: {total}</p>
-      <p>Average: {Number(average)}</p>
-      <p>Positive:{Number(positive)}%</p>
+      <StatisticsLine text={'Good'} item={props.good}/>
+      <StatisticsLine text={'Neutral'} item={props.neutral}/>
+      <StatisticsLine text={'Bad'} item={props.bad}/>
+      <StatisticsLine text={'All'} item={total}/>
+      <StatisticsLine text={'Average'} item={average}/>
+      <StatisticsLine text={'Positive'} item={positive}/>
     </div>}
     {total ===0 && <div>No feedback given</div>}
     </div>
