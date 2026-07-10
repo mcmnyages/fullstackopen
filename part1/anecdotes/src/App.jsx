@@ -13,8 +13,7 @@ const App = () => {
   ] 
   const [selected, setSelected] = useState(0)
   const[votes,setVotes]= useState(new Array(anecdotes.length).fill(0))
-  console.log('Votes',votes)
-
+ 
   const handleRandom=()=>{
     const randomNumer = Math.floor(Math.random()*10)
     setSelected(randomNumer)
@@ -26,9 +25,7 @@ const App = () => {
     setVotes(copy)
   }
   const maxVotes= Math.max(...votes)
-  // console.log('Max Votes',maxVotes)
   const indexOfMaxVotes = votes.indexOf(maxVotes)
-  // console.log('Index of max votes:', indexOfMaxVotes)
   return (
     <div>
        <p>{anecdotes[selected]}</p>
