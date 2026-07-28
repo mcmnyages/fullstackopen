@@ -8,6 +8,12 @@ const App = () => {
 
   const addPerson =(e)=>{
     e.preventDefault()
+
+    if(persons.some((t)=>t.name===newName)){
+        alert(`${newName} is already added to the phonebook!`)
+        return
+    }
+    
     const  personObj={
       name:newName
      }
@@ -18,6 +24,7 @@ const App = () => {
 const handlePersonChange =(e)=>{
   setNewName(e.target.value)
 }
+
 
   return (
     <div>
