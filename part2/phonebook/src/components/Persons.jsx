@@ -1,6 +1,6 @@
 import Person from "./Person"
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons,deleteItem }) => {
     return (
         <div>
             <h2>Numbers</h2>
@@ -10,6 +10,7 @@ const Persons = ({ persons }) => {
                     <Person
                     key={person.name}
                     person={person}
+                    deleteItem={deleteItem}
                     />
                 ))}
             </ul>

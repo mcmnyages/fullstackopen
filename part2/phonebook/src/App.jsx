@@ -15,7 +15,6 @@ const App = () => {
     .getAll()
     .then(
       (response)=>{
-        console.log('Check the responses',response)
         setPersons(response)
       }
     )
@@ -42,6 +41,18 @@ const App = () => {
 
     setNewName('')
     setNumber('')
+  }
+
+  const deletePerson=(id)=>{
+    const person = persons.find(name=>name.id===id)
+    if(
+      window.confirm(`Delete ${person.name} ?`)
+    )
+    phoneService
+    .deletePerson(id)
+    .then(response=>{
+      setPersons(persons.filter(person=>person.id!==id))
+    })
   }
 
   const handlePersonChange = (e) => {
@@ -72,6 +83,7 @@ const App = () => {
       />
       <Persons
       persons={personsToShow}
+      deleteItem={deletePerson}
       />
     </div>
   )
