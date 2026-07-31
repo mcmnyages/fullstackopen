@@ -1,6 +1,4 @@
-const Country = ({ country }) => {
-  console.log("Single Country component prop", country);
-
+const Country = ({ country}) => {
   return (
     <div>
       <h1>{country.name.common}</h1>

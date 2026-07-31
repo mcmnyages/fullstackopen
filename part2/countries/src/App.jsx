@@ -34,6 +34,10 @@ const App = () => {
     }
   }
 
+  const handleShowCountry=(countryToShow)=>{
+    setFilteredCountries([countryToShow])
+  }
+
   console.log('Filtered countires', filteredCountries)
 
 
@@ -43,13 +47,12 @@ const App = () => {
       <input onChange={handleSearch} value={search} />
       <div>
         <Notification message={message} />
-        {
-          filteredCountries.length > 1 ? (
-            <Countries countries={filteredCountries} />
-          ) : filteredCountries.length === 1 ? (
-            <Country country={filteredCountries[0]} />
-          ) : null
-        }
+       {filteredCountries.length > 0 && (
+          <Countries 
+            countries={filteredCountries} 
+            onShowClick={handleShowCountry} 
+          />
+        )}
 
       </div>
     </div>
