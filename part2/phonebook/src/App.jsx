@@ -11,7 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [number, setNumber] = useState('')
   const [search, setSearch] = useState('')
-  const [message, setMessage]=useState(null)
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState('')
   useEffect(() => {
     phoneService
       .getAll()
@@ -31,41 +32,44 @@ const App = () => {
 
 
     if (persons.some((person) => person.name === newName)) {
-      if(window.confirm(`${newName} is already added to the phonebook, replace the old number with the new one?`)){
-      const existingPerson = persons.find(person => person.name === newName)
-      const updatePerson = {
-        ...existingPerson,
-        number: personObj.number
-      }
-      phoneService
-        .updatePerson(existingPerson.id, updatePerson)
-        .then(returnedPerson => {
-          setPersons(
-            persons.map(person =>
-              person.id === returnedPerson.id
-                ? returnedPerson
-                : person
+      if (window.confirm(`${newName} is already added to the phonebook, replace the old number with the new one?`)) {
+        const existingPerson = persons.find(person => person.name === newName)
+        const updatePerson = {
+          ...existingPerson,
+          number: personObj.number
+        }
+        phoneService
+          .updatePerson(existingPerson.id, updatePerson)
+          .then(returnedPerson => {
+            setPersons(
+              persons.map(person =>
+                person.id === returnedPerson.id
+                  ? returnedPerson
+                  : person
+              )
             )
-          )
-          setMessage(`${newName}'s number has been changed to ${updatePerson.number} successfully`)
-          setTimeout(()=>{
+
+            setMessage(`${newName}'s number has been changed to ${updatePerson.number} successfully`)
+            setMessageType('success')
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+          })
+      }
+    } else {
+
+      phoneService
+        .addPerson(personObj)
+        .then(response => {
+          setPersons(persons.concat(response))
+          setMessageType('success')
+          setMessage(`Added ${newName}`)
+          setTimeout(() => {
             setMessage(null)
           }, 5000)
         })
-      }
-    }else{
-
-    phoneService
-      .addPerson(personObj)
-      .then(response => {
-        setPersons(persons.concat(response))
-        setMessage(`Added ${newName}`)
-        setTimeout(()=>{
-          setMessage(null)
-        }, 5000)
-      })
-    setNewName('')
-    setNumber('')
+      setNewName('')
+      setNumber('')
     }
   }
 
@@ -77,8 +81,23 @@ const App = () => {
       phoneService
         .deletePerson(id)
         .then(() => {
+          setMessageType('success')
+          setMessage(`Successfully deleted ${person.name}'s details!`)
           setPersons(persons.filter(person => person.id !== id))
-        })
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        }).catch(
+          (error) => {
+            setMessageType('error')
+            setMessage(
+              `Information of ${person.name} has already been removed from the server`
+            )
+            setTimeout(()=>{
+              setMessage(null)
+            }, 5000)
+          }
+        )
   }
 
   const handlePersonChange = (e) => {
@@ -96,7 +115,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message}/>
+      <Notification
+        type={messageType}
+        message={message}
+      />
       <Filter
         search={search}
         onSearchChange={handleSearch}
