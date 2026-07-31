@@ -4,13 +4,14 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import phone from './service/phone'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [number, setNumber] = useState('')
   const [search, setSearch] = useState('')
-
+  const [message, setMessage]=useState(null)
   useEffect(() => {
     phoneService
       .getAll()
@@ -36,7 +37,6 @@ const App = () => {
         ...existingPerson,
         number: personObj.number
       }
-      console.log('Updated user', updatePerson)
       phoneService
         .updatePerson(existingPerson.id, updatePerson)
         .then(returnedPerson => {
@@ -47,6 +47,10 @@ const App = () => {
                 : person
             )
           )
+          setMessage(`${newName}'s number has been changed to ${updatePerson.number} successfully`)
+          setTimeout(()=>{
+            setMessage(null)
+          }, 5000)
         })
       }
     }else{
@@ -55,8 +59,11 @@ const App = () => {
       .addPerson(personObj)
       .then(response => {
         setPersons(persons.concat(response))
+        setMessage(`Added ${newName}`)
+        setTimeout(()=>{
+          setMessage(null)
+        }, 5000)
       })
-
     setNewName('')
     setNumber('')
     }
@@ -89,6 +96,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter
         search={search}
         onSearchChange={handleSearch}
