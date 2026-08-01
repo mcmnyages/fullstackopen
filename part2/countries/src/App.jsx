@@ -2,7 +2,6 @@ import { useState, useEffect } from "react"
 import countriesService from './service/countries'
 import Notification from "./component/Notification"
 import Countries from "./component/Countries"
-import Country from "./component/Country"
 
 const App = () => {
   const [countries, setCountries] = useState([])
@@ -20,11 +19,16 @@ const App = () => {
   }, [])
 
   const handleSearch = (e) => {
-    const query = e.target.value;
+    const query = e.target.value.trim();
     setSearch(query)
+    if (query === "") {
+      setMessage('')
+      return;
+    }
     const matches = countries.filter(country => {
       return country.name.common.toLowerCase().includes(query.toLowerCase());
     })
+
     if (matches.length > 10) {
       setMessage('Too many matches,specify another filter')
       setFilteredCountries([])
@@ -34,12 +38,11 @@ const App = () => {
     }
   }
 
-  const handleShowCountry=(countryToShow)=>{
+  const handleShowCountry = (countryToShow) => {
     setFilteredCountries([countryToShow])
   }
 
-  console.log('Filtered countires', filteredCountries)
-
+  // console.log('Filtered countires', filteredCountries)
 
   return (
     <div>
@@ -47,13 +50,10 @@ const App = () => {
       <input onChange={handleSearch} value={search} />
       <div>
         <Notification message={message} />
-       {filteredCountries.length > 0 && (
-          <Countries 
-            countries={filteredCountries} 
-            onShowClick={handleShowCountry} 
-          />
-        )}
-
+              <Countries
+                countries={filteredCountries}
+                onShowClick={handleShowCountry}
+              />
       </div>
     </div>
   )
