@@ -13,7 +13,7 @@ const App = () => {
     countriesService
       .getAll()
       .then(response => {
-        console.log("All countries", response)
+        // console.log("All countries", response)
         setCountries(response)
       })
   }, [])

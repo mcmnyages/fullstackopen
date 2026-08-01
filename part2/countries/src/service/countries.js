@@ -12,7 +12,6 @@ const getAll=()=>{
 const getCountry=(country)=>{
     const request = axios.get(`${baseUrl}/api/name/${country}`)
    return request.then(response=>{
-        console.log('Country',response.data)
        return  response.data}
     )
 }
