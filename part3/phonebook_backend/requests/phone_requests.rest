@@ -1,7 +1,21 @@
-POST http://localhost:3001/api/persons
-Content-Type: "application/json"
+@baseUrl = http://localhost:3001/api
+@personId = 1
+
+
+### retrieve all the persons
+GET {{baseUrl}}/persons
+
+### retireve a sepcifc person 
+GET {{baseUrl}}/persons/{{personId}}
+
+### Add a person
+POST {{{{baseUrl}}}}/persons
+Content-Type: application/json
 
 {
     "name":"Kevin Kiptum",
     "number":"038391333"
 }
+
+### Deletes a person
+DELETE {{baseUrl}}/persons/{{personId}} 
