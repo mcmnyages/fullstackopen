@@ -1,9 +1,10 @@
 import express, { json, response } from 'express'
+import morgan from 'morgan'
 
 const app = express()
 
 app.use(json())
-
+app.use(morgan('tiny'))
 let persons = [
   {
     "id": "1",
