@@ -9,7 +9,7 @@ GET {{baseUrl}}/persons
 GET {{baseUrl}}/persons/{{personId}}
 
 ### Add a person
-POST {{{{baseUrl}}}}/persons
+POST {{baseUrl}}/persons
 Content-Type: application/json
 
 {
