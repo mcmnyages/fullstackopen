@@ -1,5 +1,9 @@
-const express = require('express')
+import express from 'express'
+import cors from 'cors'
+
+
 const app = express()
+// app.use(cors()) confiured proxy in my frontend so no need for it, uncomment if you need to use it
 
 let notes = [
   {
@@ -20,6 +24,7 @@ let notes = [
 ]
 
 app.use(express.json())
+app.use(express.static('dist'))
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -73,7 +78,9 @@ app.delete('/api/notes/:id', (request, response) => {
   response.status(204).end()
 })
 
-const PORT = 3001
+
+const PORT = process.env.PORT || 3001
+console.log('Port',PORT)
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
