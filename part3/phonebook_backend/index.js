@@ -1,7 +1,12 @@
 import express, { json, response } from 'express'
 import morgan from 'morgan'
+import cors from "cors"
 
 const app = express()
+app.use(express.static('dist'))
+// app.use(cors()) since I build frontend in this backend folder there is no need for cors
+//I have used reversed proxy in the fronted 
+//And since I am going to push the dist folder and backend it means I also have the UI. Allow cors when not using this type of method though.
 
 app.use(json())
 let persons = [
@@ -35,10 +40,6 @@ app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms :body')
 )
 
-
-app.get('/', (request, response) => {
-  response.send('<h1>It is working finally</h1>')
-})
 
 app.get('/api/info', (request, response) => {
 
@@ -106,7 +107,7 @@ app.delete('/api/persons/:id', (request, response) => {
 
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => {
   console.log(`Server UP and listening to port ${PORT}`)

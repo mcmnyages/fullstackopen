@@ -7,12 +7,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
+    "build:ui": "shx rm -rf dist && npm --prefix ../../part2/phonebook run build && shx cp -r ../../part2/phonebook/dist .",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
     "dev": "node --watch index.js"
   },
   "author": "@McMnyages",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.6",
     "express": "^5.2.1",
-    "morgan": "^1.11.0"
+    "morgan": "^1.11.0",
+    "shx": "^0.4.0"
   }
 }
