@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-     "build:ui": "shx rm -rf dist && npm --prefix ../../part2/notes run build && shx cp -r ../../part2/notes/dist .",
+    "build:ui": "shx rm -rf dist && npm --prefix ../../part2/notes run build && shx cp -r ../../part2/notes/dist .",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
     "dev": "node --watch index.js",
     "test": "test"
@@ -15,7 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongoose": "^9.9.1"
   },
   "devDependencies": {
     "shx": "^0.4.0"
