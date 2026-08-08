@@ -1,7 +1,4 @@
-POST http://localhost:3001/api/notes
-Content-Type: application/json
+GET http://localhost:3001/api/notes
 
-{
-    "content": "Javascript is good",
-    "imprtant":"false"
-}
+###
+GET http://localhost:3001/api/notes/6a75ff35e21718705cdc2a34
