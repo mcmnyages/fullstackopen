@@ -1,36 +1,20 @@
 import express, { json, response } from 'express'
+import dotenv from 'dotenv'
+dotenv.config()
 import morgan from 'morgan'
 import cors from "cors"
+import Person from './models/person.js'
+import { compose } from 'node:stream'
+
 
 const app = express()
+app.use(express.json())
 app.use(express.static('dist'))
+// app.use(cors())
 // app.use(cors()) since I build frontend in this backend folder there is no need for cors
 //I have used reversed proxy in the fronted 
 //And since I am going to push the dist folder and backend it means I also have the UI. Allow cors when not using this type of method though.
 
-app.use(json())
-let persons = [
-  {
-    "id": "1",
-    "name": "Arto Hellas",
-    "number": "040-123456"
-  },
-  {
-    "id": "2",
-    "name": "Ada Lovelace",
-    "number": "39-44-5323523"
-  },
-  {
-    "id": "3",
-    "name": "Dan Abramov",
-    "number": "12-43-234345"
-  },
-  {
-    "id": "4",
-    "name": "Mary Poppendieck",
-    "number": "39-23-6423122"
-  }
-]
 
 
 morgan.token('body', (req) => {
@@ -48,21 +32,20 @@ app.get('/api/info', (request, response) => {
     `)
 })
 
+
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(person=>{
+     response.json(person)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  const person = persons.find(person => person.id === id)
-
-  if (id) {
+  Person.findById(request.params.id).then( person=>{
     response.json(person)
-  } else {
-    response.status(404).end()
   }
-
+  )
 })
+
 
 
 app.post('/api/persons', (request, response) => {
@@ -70,30 +53,34 @@ app.post('/api/persons', (request, response) => {
 
   if (!body.name || !body.number) {
     return response.status(400).json({
-      error: "Missing name or number!"
+      error: 'Missing name or number!'
     })
   }
 
-  const nameExist = persons.find((person)=>{
-    return person.name===body.name
-  })
-  
+  Person.findOne({ name: body.name })
+    .then(existingPerson => {
+      if (existingPerson) {
+        return response.status(400).json({
+          error: 'Name must be unique!'
+        })
+      }
 
-  if(nameExist){
-    return response.status(400).json({
-      error:"Name must be unique!"
+      const person = new Person({
+        name: body.name,
+        number: body.number
+      })
+
+      return person.save()
     })
-  }
-
-  const person = {
-    id: Math.floor(Math.random() * 10000000),
-    name: body.name,
-    number: body.number
-  }
-
-  persons = persons.concat(person);
-
-  response.json(persons)
+    .then(savedPerson => {
+      response.status(201).json(savedPerson)
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(500).json({
+        error: 'Something went wrong'
+      })
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -107,7 +94,8 @@ app.delete('/api/persons/:id', (request, response) => {
 
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT 
+console.log('Port', PORT)
 
 app.listen(PORT, () => {
   console.log(`Server UP and listening to port ${PORT}`)

@@ -33,7 +33,6 @@ Note.findById(request.params.id).then(
 })
 
 
-
 app.post('/api/notes', (request, response) => {
   const body = request.body
 
