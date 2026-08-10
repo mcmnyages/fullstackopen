@@ -36,30 +36,36 @@ const errorHandler = (error, request, response, next) => {
 }
 
 
-app.get('/api/info', (request, response) => {
-
-  response.send(`<p>Phonebook has infor for ${persons.length} people</p>
+app.get('/api/info', (request, response,next) => {
+  Person.estimatedDocumentCount().then(people=>{
+     response.send(`<p>Phonebook has infor for <b>${people}</b> people</p>
     <p>${new Date()}</p>
     `)
+  }).catch(error=>next(error))
 })
 
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
   Person.find({}).then(person=>{
      response.json(person)
-  })
+  }).catch(error=>next(error))
 })
 
-app.get('/api/persons/:id', (request, response) => {
-  Person.findById(request.params.id).then( person=>{
-    response.json(person)
-  }
-  )
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body.name || !body.number) {
@@ -86,16 +92,32 @@ app.post('/api/persons', (request, response) => {
     .then(savedPerson => {
       response.status(201).json(savedPerson)
     })
-    .catch(error => {
-      console.log(error)
-      response.status(500).json({
-        error: 'Something went wrong'
-      })
+    .catch(error =>next(error))
+})
+
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const { name, number } = request.body
+
+  Person.findById(request.params.id)
+    .then(person => {
+      if (!person) {
+        return response.status(404).end()
+      }
+
+      person.name = name
+      person.number = number
+
+      return person.save()
     })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
-  Person.findOneAndDelete(request.params.id)
+ Person.findByIdAndDelete(request.params.id)
     .then(deletedPerson => {
       response.status(204).end()
     })
