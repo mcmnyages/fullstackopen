@@ -9,11 +9,8 @@ dns.setServers(['8.8.8.8', '8.8.4.4','1.1.1.1']);
 
 mongoose.set('strictQuery', false)
 
-
 const url = process.env.MONGODB_URI
-console.log('URl from en', url)
 
-console.log('connecting to', url)
 mongoose
 .connect(url, { family: 4 })
 .then(result => {
