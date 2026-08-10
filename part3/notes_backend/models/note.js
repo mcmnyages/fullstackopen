@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import 'dotenv/config'; //I had to use this here to load the variable since in the index.js the note.js was not recieving the mongourl
 import dns from 'dns'; //
+import { type } from "os";
 
 
 // Override the default DNS resolver to avoid SRV lookup errors (ECONNREFUSED)
@@ -21,8 +22,12 @@ mongoose
   })
 
 const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
+  content: {
+    type: String,
+    minLength: 5,
+    required: true
+  },
+  important: Boolean
 })
 
 noteSchema.set('toJSON', {
