@@ -25,6 +25,17 @@ app.use(
 )
 
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+
 app.get('/api/info', (request, response) => {
 
   response.send(`<p>Phonebook has infor for ${persons.length} people</p>
@@ -83,16 +94,16 @@ app.post('/api/persons', (request, response) => {
     })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  const person = persons.filter(person => person.id !== id)
-  if (id) {
-    response.status(204).end()
-  } else {
-    response.status(404)
-  }
-
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findOneAndDelete(request.params.id)
+    .then(deletedPerson => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
+
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT 
 console.log('Port', PORT)
