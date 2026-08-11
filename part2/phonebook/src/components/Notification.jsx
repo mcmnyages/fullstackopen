@@ -3,8 +3,6 @@ const Notification = ({ type,message }) => {
     return null
   }
 
-  console.log('Displaying the type of the message', type)
-
   return (
     <div className={type}>
       {message}
