@@ -13,8 +13,8 @@ POST {{baseUrl}}/persons
 Content-Type: application/json
 
 {
-    "name":"Kevin Kiptum",
-    "number":"038391333"
+  "name": "Test Person",
+  "number": "040-22334455"
 }
 
 ### Deletes a person
