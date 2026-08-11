@@ -9,7 +9,8 @@
     "build:ui": "shx rm -rf dist && npm --prefix ../../part2/notes run build && shx cp -r ../../part2/notes/dist .",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
     "dev": "node --watch index.js",
-    "test": "test"
+    "test": "test",
+    "lint":"eslint"
   },
   "author": "@McMnyages",
   "license": "ISC",
@@ -20,6 +21,10 @@
     "mongoose": "^9.9.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.8.1",
+    "globals": "^17.9.0",
     "shx": "^0.4.0"
   }
 }
