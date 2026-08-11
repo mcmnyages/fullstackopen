@@ -1,8 +1,6 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
-import cors from 'cors'
-import mongoose from 'mongoose'
 import Note from './models/note.js'
 
 const app = express()
@@ -91,11 +89,11 @@ app.put('/api/notes/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.delete('/api/notes/:id', (request, response, erro) => {
-  Note.findOneAndDelete(request.params.id).then(result => {
+app.delete('/api/notes/:id', (request, response,next) => {
+  Note.findOneAndDelete(request.params.id).then(() => {
     response.status(204).end()
   }
-).catch(error=>next(error))
+  ).catch(error => next(error))
 })
 
 
