@@ -1,10 +1,9 @@
-import express, { json, response } from 'express'
+import express from 'express'
 import dotenv from 'dotenv'
 dotenv.config()
 import morgan from 'morgan'
-import cors from "cors"
+// import cors from 'cors'
 import Person from './models/person.js'
-import { compose } from 'node:stream'
 
 
 const app = express()
@@ -12,7 +11,7 @@ app.use(express.json())
 app.use(express.static('dist'))
 // app.use(cors())
 // app.use(cors()) since I build frontend in this backend folder there is no need for cors
-//I have used reversed proxy in the fronted 
+//I have used reversed proxy in the fronted
 //And since I am going to push the dist folder and backend it means I also have the UI. Allow cors when not using this type of method though.
 
 
@@ -39,18 +38,18 @@ const errorHandler = (error, request, response, next) => {
 
 
 app.get('/api/info', (request, response,next) => {
-  Person.estimatedDocumentCount().then(people=>{
-     response.send(`<p>Phonebook has infor for <b>${people}</b> people</p>
+  Person.estimatedDocumentCount().then(people => {
+    response.send(`<p>Phonebook has infor for <b>${people}</b> people</p>
     <p>${new Date()}</p>
     `)
-  }).catch(error=>next(error))
+  }).catch(error => next(error))
 })
 
 
 app.get('/api/persons', (request, response, next) => {
-  Person.find({}).then(person=>{
-     response.json(person)
-  }).catch(error=>next(error))
+  Person.find({}).then(person => {
+    response.json(person)
+  }).catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -88,7 +87,7 @@ app.post('/api/persons', (request, response, next) => {
     .then(savedPerson => {
       response.status(201).json(savedPerson)
     })
-    .catch(error =>next(error))
+    .catch(error => next(error))
 })
 
 
@@ -113,8 +112,8 @@ app.put('/api/persons/:id', (request, response, next) => {
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
- Person.findByIdAndDelete(request.params.id)
-    .then(deletedPerson => {
+  Person.findByIdAndDelete(request.params.id)
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -123,7 +122,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT 
+const PORT = process.env.PORT
 console.log('Port', PORT)
 
 app.listen(PORT, () => {

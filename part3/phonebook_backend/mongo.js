@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose"
+import mongoose from 'mongoose'
 import dns from 'node:dns'
 
 
@@ -29,8 +29,8 @@ const personSchema = new mongoose.Schema({
 const Person = mongoose.model('Person', personSchema)
 
 const person = new Person({
-    name: process.argv[3],
-    number: process.argv[4]
+  name: process.argv[3],
+  number: process.argv[4]
 })
 
 person.save()
@@ -44,4 +44,3 @@ person.save()
     })
     mongoose.connection.close()
   })
- 
