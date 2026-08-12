@@ -9,7 +9,8 @@
     "start": "node index.js",
     "build:ui": "shx rm -rf dist && npm --prefix ../../part2/phonebook run build && shx cp -r ../../part2/phonebook/dist .",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
-    "dev": "node --watch index.js"
+    "dev": "node --watch index.js",
+    "lint": "eslint ."
   },
   "author": "@McMnyages",
   "license": "ISC",
@@ -20,5 +21,11 @@
     "mongoose": "^9.9.1",
     "morgan": "^1.11.0",
     "shx": "^0.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.8.1",
+    "globals": "^17.10.0"
   }
 }
