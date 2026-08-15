@@ -9,7 +9,7 @@
     "build:ui": "shx rm -rf dist && npm --prefix ../../part2/notes run build && shx cp -r ../../part2/notes/dist .",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
     "dev": "node --watch index.js",
-    "test": "test",
+    "test": "node --test",
     "lint":"eslint"
   },
   "author": "@McMnyages",
