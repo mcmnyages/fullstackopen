@@ -5,17 +5,18 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
     "build:ui": "shx rm -rf dist && npm --prefix ../../part2/notes run build && shx cp -r ../../part2/notes/dist .",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
-    "dev": "node --watch index.js",
-    "test": "node --test",
-    "lint":"eslint"
+    "dev": "cross-env NODE_ENV=development node --watch index.js",
+    "test": "cross-env NODE_ENV=test node --test",
+    "lint": "eslint"
   },
   "author": "@McMnyages",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.6",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mongoose": "^9.9.1"
