@@ -11,3 +11,17 @@ Content-Type: application/json
   "url": "https://example.com/fullstack",
   "likes": 30
 }
+
+###
+DELETE http://localhost:3003/api/blogs/6a7f2d8b0519bb42ac4566ee
+
+###
+PUT http://localhost:3003/api/blogs/6a7f2bbea963968e694211ed
+Content-Type: application/json
+
+{
+  "title": "Updated blog title",
+  "author": "Updated Author",
+  "url": "https://example.com/updated",
+  "likes": 15
+}
