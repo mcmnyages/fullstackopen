@@ -40,21 +40,40 @@ test('blogs returned as json', async () => {
 
 })
 
-test('all blogs returned', async()=>{
+test('all blogs returned', async () => {
     const response = await api.get('/api/blogs')
-    
+
     assert.strictEqual(response.body.length, initialBlogs.length)
 })
 
-test('unique identifier property id named id', async ()=>{
+test('unique identifier property id named id', async () => {
     const response = await api.get('/api/blogs')
 
-    response.body.forEach(blog=>{
+    response.body.forEach(blog => {
         assert.ok(blog.id)
-        assert.strictEqual(blog.__id,undefined)
+        assert.strictEqual(blog.__id, undefined)
     })
 })
 
-after(async()=>{
+test('a valid blog post can be added', async () => {
+    const newBlog = {
+        title: 'New Blog',
+        author: 'New Author',
+        url: 'https://example.com/new-blog',
+        likes: 7
+    }
+    const blogsAtStart = await api.get('/api/blogs')
+    await api.post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await api.get('/api/blogs')
+
+    assert.strictEqual(blogsAtEnd.body.length,blogsAtStart.body.length+1)
+
+})
+
+after(async () => {
     await mongoose.connection.close()
 })
