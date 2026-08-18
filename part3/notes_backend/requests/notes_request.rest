@@ -1,0 +1,44 @@
+@baseUrl = http://localhost:3001
+@notesUrl = {{baseUrl}}/api/notes
+@usersUrl = {{baseUrl}}/api/users
+@noteId = 67cadab408282ee8ed1e61d0
+
+### Create note
+POST {{notesUrl}}
+Content-Type: application/json
+
+{
+  "content": "I have managed to push data to mongo db",
+  "important": false
+}
+
+### Get all notes
+GET {{notesUrl}}
+
+### Get one note
+GET {{notesUrl}}/here
+
+### Update note
+PUT {{notesUrl}}/{{noteId}}
+Content-Type: application/json
+
+{
+  "content": "HTML is easy",
+  "important": true
+}
+
+### Delete note
+DELETE {{notesUrl}}/{{noteId}}
+
+### Create user
+POST {{usersUrl}}
+Content-Type: application/json
+
+{
+  "username": "root",
+  "name": "Superuser",
+  "password": "salainen"
+}
+
+### Get all users
+GET {{usersUrl}}
