@@ -1,6 +1,7 @@
 @baseUrl = http://localhost:3001
 @notesUrl = {{baseUrl}}/api/notes
 @usersUrl = {{baseUrl}}/api/users
+@userId= 6a844b8182b42b693c895e08
 @noteId = 67cadab408282ee8ed1e61d0
 
 ### Create note
@@ -8,8 +9,9 @@ POST {{notesUrl}}
 Content-Type: application/json
 
 {
-  "content": "I have managed to push data to mongo db",
-  "important": false
+  "content": "I have managed to push data to mongo db and also the user id",
+  "important": false,
+  "userId":"{{userId}}"
 }
 
 ### Get all notes
