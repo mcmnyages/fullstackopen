@@ -1,8 +1,27 @@
+@baseUrl=http://localhost:3003/api
 
-GET http://localhost:3003/api/blogs
+############ USERS ########
 
 ###
-POST  http://localhost:3003/api/blogs
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "username": "root",
+  "name": "Superuser",
+  "password": "salasana"
+}
+
+###
+GET {{baseUrl}}/users
+
+############ BLOGS ########
+
+###
+GET {{baseUrl}}/blogs
+
+###
+POST {{baseUrl}}/blogs
 Content-Type: application/json
 
 {
@@ -13,10 +32,10 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3003/api/blogs/6a7f2d8b0519bb42ac4566ee
+DELETE {{baseUrl}}/blogs/6a7f2d8b0519bb42ac4566ee
 
 ###
-PUT http://localhost:3003/api/blogs/6a7f2bbea963968e694211ed
+PUT {{baseUrl}}/blogs/6a7f2bbea963968e694211ed
 Content-Type: application/json
 
 {

@@ -1,10 +1,11 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const dns =require('dns')
 const config = require('./utils/config')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 const blogRouter = require('./controller/blog')
-const dns =require('dns')
+const usersRouter = require('./controller/users')
 
 
 const app = express()
@@ -24,6 +25,7 @@ mongoose
 app.use(express.json())
 app.use(middleware.requestLogger)
 
+app.use('/api/users', usersRouter)
 app.use('/api/blogs', blogRouter)
 
 app.use(middleware.unknownEndpoint)
