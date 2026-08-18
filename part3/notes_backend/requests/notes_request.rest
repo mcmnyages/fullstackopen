@@ -1,12 +1,14 @@
 @baseUrl = http://localhost:3001
 @notesUrl = {{baseUrl}}/api/notes
 @usersUrl = {{baseUrl}}/api/users
+@loginUrl = {{baseUrl}}/api/login
 @userId= 6a844b8182b42b693c895e08
 @noteId = 67cadab408282ee8ed1e61d0
 
 ### Create note
 POST {{notesUrl}}
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjZhODQ0YjgxODJiNDJiNjkzYzg5NWUwOCIsImlhdCI6MTc4NzA2MjEwOH0.9HH8LR68J_vuiD7LHN8LZ12f0-oWaY0jhsRzna4k4G0
 
 {
   "content": "I have managed to push data to mongo db and also the user id",
@@ -44,3 +46,12 @@ Content-Type: application/json
 
 ### Get all users
 GET {{usersUrl}}
+
+###
+POST  {{loginUrl}}
+Content-Type: application/json
+
+{
+  "username": "root",
+  "password": "salainen"
+}
