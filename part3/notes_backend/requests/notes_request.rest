@@ -8,7 +8,7 @@
 ### Create note
 POST {{notesUrl}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjZhODQ0YjgxODJiNDJiNjkzYzg5NWUwOCIsImlhdCI6MTc4NzA2MjEwOH0.9HH8LR68J_vuiD7LHN8LZ12f0-oWaY0jhsRzna4k4G0
+Authorization: Bearer {{your token here}}
 
 {
   "content": "I have managed to push data to mongo db and also the user id",
