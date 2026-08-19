@@ -66,7 +66,7 @@ test('a valid blog post can be added', async () => {
   
   await api.post('/api/blogs')
     .send(newBlog)
-    .set('Authorization', `Bearer ${token}`) // Added token
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -85,7 +85,7 @@ test('likes defaults to 0 if missing', async () => {
   const response = await api
     .post('/api/blogs')
     .send(newBlog)
-    .set('Authorization', `Bearer ${token}`) // Added token
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
 
   assert.strictEqual(response.body.likes, 0)
@@ -100,7 +100,7 @@ test('blog without title is not added', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
-    .set('Authorization', `Bearer ${token}`) // Added token to bypass auth and test validation
+    .set('Authorization', `Bearer ${token}`)
     .expect(400)
 })
 
@@ -113,11 +113,10 @@ test('blog without url is not added', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
-    .set('Authorization', `Bearer ${token}`) // Added token to bypass auth and test validation
+    .set('Authorization', `Bearer ${token}`) 
     .expect(400)
 })
 
-// Exercise 4.23: Test that adding a blog fails without a token
 test('blog cannot be added without a token and returns 401', async () => {
   const newBlog = {
     title: 'Unauthorized Blog',
@@ -130,7 +129,6 @@ test('blog cannot be added without a token and returns 401', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
-    // No Authorization header sent intentionally
     .expect(401)
     .expect('Content-Type', /application\/json/)
 
