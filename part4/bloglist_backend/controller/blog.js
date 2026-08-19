@@ -1,24 +1,28 @@
+const jwt = require('jsonwebtoken')
 const blogRouter = require('express').Router()
 const { response } = require('../app')
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const { userExtractor } = require('../utils/middleware')
 
 blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
-// POST new blog
-blogRouter.post('/', async (request, response) => {
-  const body = request.body
-
-  // Temporary: pick the first user from the database as the creator
-  const users = await User.find({})
-  const user = users[0]
-
-  if (!user) {
-    return response.status(400).json({ error: 'no users found in database, create a user first' })
+// Helper to extract token from the Authorization header
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.startsWith('Bearer ')) {
+    return authorization.replace('Bearer ', '')
   }
+  return null
+}
+
+// POST route protected by userExtractor
+blogRouter.post('/', userExtractor, async (request, response) => {
+  const body = request.body
+  const user = request.user // Automatically provided by userExtractor!
 
   const blog = new Blog({
     title: body.title,
@@ -29,8 +33,6 @@ blogRouter.post('/', async (request, response) => {
   })
 
   const savedBlog = await blog.save()
-  
-  // Save the blog reference to the user's blogs array
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
 
@@ -53,11 +55,28 @@ blogRouter.put('/:id', async (request, response) => {
   response.json(updatedBlog)
 })
 
-blogRouter.delete('/:id', async (request, response) => {
-  const id = request.params.id
-  const deletedItem = await Blog.findByIdAndDelete(id)
-  response.status(204).end()
+blogRouter.delete('/:id', userExtractor, async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
 
+  if (!blog) {
+    return response.status(404).json({ error: 'blog not found' })
+  }
+
+  const user = request.user
+
+  // Ensure the user trying to delete is the creator of the blog
+  // Note: blog.user is an ObjectId, user._id is an ObjectId. Convert them to string!
+  if (blog.user.toString() !== user._id.toString()) {
+    return response.status(403).json({ error: 'only the creator can delete this blog' })
+  }
+
+  await Blog.findByIdAndDelete(request.params.id)
+
+  // Clean up user's blogs array reference
+  user.blogs = user.blogs.filter(b => b.toString() !== blog._id.toString())
+  await user.save()
+
+  response.status(204).end()
 })
 
 module.exports = blogRouter
