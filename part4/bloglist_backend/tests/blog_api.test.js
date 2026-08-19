@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 
 const app = require('../app')
 const Blog = require('../models/blog')
-const User = require('../models/user') // Added back
+const User = require('../models/user') 
 const helper = require('./test_helper')
 
 const api = supertest(app)
@@ -16,7 +16,8 @@ beforeEach(async () => {
   await Blog.deleteMany({})
   await User.deleteMany({})
 
-  const passwordHash = await bcrypt.hash('sekret', 10)
+  const testPassword = 'sekret'
+  const passwordHash = await bcrypt.hash(testPassword, 10)
   const user = new User({ username: 'testuser', name: 'Test User', passwordHash })
   await user.save()
 
@@ -143,7 +144,7 @@ test('a blog can be deleted', async () => {
 
   await api
     .delete(`/api/blogs/${blogToDelete.id}`)
-    .set('Authorization', `Bearer ${token}`) // Added token because deletion requires user verification
+    .set('Authorization', `Bearer ${token}`) 
     .expect(204)
 
   const blogsAtEnd = await helper.blogsInDb()
