@@ -2,7 +2,7 @@
 
 ############ USERS ########
 
-###
+### Create User  ###
 POST {{baseUrl}}/users
 Content-Type: application/json
 
@@ -12,15 +12,26 @@ Content-Type: application/json
   "password": "salasana"
 }
 
-###
+### Get All Users ###
 GET {{baseUrl}}/users
+
+### Login ####
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "root",
+  "password": "salasana"
+}
+
 
 ############ BLOGS ########
 
-###
+### Get all blogs ###
 GET {{baseUrl}}/blogs
 
-###
+
+### Create A Blog ###
 POST {{baseUrl}}/blogs
 Content-Type: application/json
 
@@ -31,10 +42,10 @@ Content-Type: application/json
   "likes": 30
 }
 
-###
+### Delete A specific blog ###
 DELETE {{baseUrl}}/blogs/6a7f2d8b0519bb42ac4566ee
 
-###
+### Edit A specific blog ###
 PUT {{baseUrl}}/blogs/6a7f2bbea963968e694211ed
 Content-Type: application/json
 
