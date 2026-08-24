@@ -12,10 +12,21 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [formVisible, setFormVisible] = useState(false)
   const [notification, setNotification] = useState({
     message: null,
     type: null
   })
+
+
+  const hideWhenVisible = {
+    display: formVisible ? 'none' : ''
+  }
+
+  const showWhenVisible = {
+    display: formVisible ? '' : 'none'
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -44,9 +55,9 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedNoteappUser')
     setNotification({
-        message: `${user.name} Logged out successfully`,
-        type: 'success'
-      })
+      message: `${user.name} Logged out successfully`,
+      type: 'success'
+    })
     setUser(null)
   }
 
@@ -76,6 +87,7 @@ const App = () => {
         message: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
         type: 'success'
       })
+      setFormVisible(false)
       setTitle('')
       setAuthor('')
       setUrl('')
@@ -114,30 +126,35 @@ const App = () => {
   )
 
   const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <div>
-        title
-        <input
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
-      <div>
-        author
-        <input
-          value={author}
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-        url
-        <input
-          value={url}
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-      <button type="submit">create</button>
-    </form>
+    <div style={showWhenVisible}>
+      <form onSubmit={addBlog}>
+        <div>
+          title
+          <input
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
+          author
+          <input
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </div>
+        <div>
+          url
+          <input
+            value={url}
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
+        <button type="submit">create</button>
+      </form>
+      <button onClick={() => setFormVisible(false)}>
+        cancel
+      </button>
+    </div>
   )
 
   useEffect(() => {
@@ -186,6 +203,11 @@ const App = () => {
       {user.name} logged in
       <button onClick={handleLogout}>logout</button>
       <h2>create new</h2>
+      <div style={hideWhenVisible}>
+        <button onClick={() => setFormVisible(true)}>
+          create new blog
+        </button>
+      </div>
       {blogForm()}
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
