@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
@@ -9,20 +10,14 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [formVisible, setFormVisible] = useState(false)
   const [notification, setNotification] = useState({
     message: null,
     type: null
   })
-
-
   const hideWhenVisible = {
     display: formVisible ? 'none' : ''
   }
-
   const showWhenVisible = {
     display: formVisible ? '' : 'none'
   }
@@ -35,7 +30,8 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
       window.localStorage.setItem(
-        'loggedNoteappUser', JSON.stringify(user)
+        'loggedNoteappUser',
+        JSON.stringify(user)
       )
       setNotification({
         message: `Welcome ${user.name}`,
@@ -71,15 +67,7 @@ const App = () => {
     }
   }, [])
 
-  const addBlog = async event => {
-    event.preventDefault()
-
-    const blogObject = {
-      title,
-      author,
-      url
-    }
-
+  const createBlog = async blogObject => {
     try {
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
@@ -88,9 +76,6 @@ const App = () => {
         type: 'success'
       })
       setFormVisible(false)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
     } catch {
       setNotification({
         message: 'adding the blog failed',
@@ -125,38 +110,6 @@ const App = () => {
     </form>
   )
 
-  const blogForm = () => (
-    <div style={showWhenVisible}>
-      <form onSubmit={addBlog}>
-        <div>
-          title
-          <input
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          author
-          <input
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url
-          <input
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>
-      <button onClick={() => setFormVisible(false)}>
-        cancel
-      </button>
-    </div>
-  )
-
   useEffect(() => {
     blogService.getAll().then(blogs => {
       setBlogs(blogs)
@@ -167,7 +120,6 @@ const App = () => {
     if (notification.message === null) {
       return
     }
-
     const timeoutId = setTimeout(() => {
       setNotification({
         message: null,
@@ -208,7 +160,12 @@ const App = () => {
           create new blog
         </button>
       </div>
-      {blogForm()}
+      <div style={showWhenVisible}>
+        <BlogForm createBlog={createBlog} />
+        <button onClick={() => setFormVisible(false)}>
+          cancel
+        </button>
+      </div>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
