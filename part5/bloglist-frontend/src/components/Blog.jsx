@@ -14,7 +14,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   if (!visible) {
     return (
       <div style={blogStyle}>
-        {blog.title} {blog.author}
+        <span>{blog.title}</span> {blog.author}
         <button onClick={() => setVisible(true)}>
           view
         </button>
@@ -47,7 +47,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
       </div>
       {blog.user && blog.user.username === user.username && (
         <button onClick={() => deleteBlog(blog)} style={{ backgroundColor: 'red' }}>
-            Delete
+          Delete
         </button>
       )}
     </div>
