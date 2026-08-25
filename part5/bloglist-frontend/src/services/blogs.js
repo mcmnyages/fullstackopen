@@ -25,8 +25,8 @@ const updateBlog = async (id, blog) => {
   return response.data
 }
 
-const deleteBlog = async (id)=>{
-   const config = {
+const deleteBlog = async (id) => {
+  const config = {
     headers: {
       Authorization: token
     }

@@ -185,7 +185,7 @@ const App = () => {
           cancel
         </button>
       </div>
-      {blogs 
+      {blogs
         .sort((a, b) => b.likes - a.likes)
         .map(blog =>
           <Blog

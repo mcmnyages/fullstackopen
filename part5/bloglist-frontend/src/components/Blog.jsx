@@ -46,10 +46,10 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
         added by {blog.user?.name}
       </div>
       {blog.user && blog.user.username === user.username && (
-          <button onClick={() => deleteBlog(blog)} style={{ backgroundColor: 'red' }}>
+        <button onClick={() => deleteBlog(blog)} style={{ backgroundColor: 'red' }}>
             Delete
-          </button>
-        )}
+        </button>
+      )}
     </div>
   )
 }
