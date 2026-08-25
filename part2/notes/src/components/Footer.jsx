@@ -10,7 +10,7 @@ const Footer = () => {
       <p>
         Note app, Department of Computer Science, University of Helsinki 2026
       </p>
-     <p>Coded by: @McMnyages</p>
+      <p>Coded by: @McMnyages</p>
     </div>
   )
 }

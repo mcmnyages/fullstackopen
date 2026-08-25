@@ -40,7 +40,7 @@ const App = () => {
     noteFormRef.current.toggleVisibility()
     noteService
       .create(noteObject)
-      .then(returnedNote => {     
+      .then(returnedNote => {
         setNotes(notes.concat(returnedNote))
       })
   }
