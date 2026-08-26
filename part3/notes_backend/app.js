@@ -12,13 +12,13 @@ import {
 import notesRouter from './controllers/notes.js'
 import usersRouter from './controllers/users.js'
 import loginRouter from './controllers/login.js'
-
+import testingRouter from './controllers/testing.js'
 
 const app = express()
 
 // Override the default DNS resolver to avoid SRV lookup errors (ECONNREFUSED)
 // when connecting to MongoDB Atlas.
-dns.setServers(['8.8.8.8', '8.8.4.4','1.1.1.1'])
+dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1'])
 logger.info('connecting to', config.MONGODB_URI)
 
 mongoose
@@ -38,6 +38,10 @@ app.use(requestLogger)
 app.use('/api/login', loginRouter)
 app.use('/api/notes', notesRouter)
 app.use('/api/users', usersRouter)
+
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/testing', testingRouter)
+}
 
 app.use(unknownEndpoint)
 app.use(errorHandler)
