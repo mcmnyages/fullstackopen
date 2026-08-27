@@ -12,12 +12,16 @@ const createNote = async (page, content) => {
   await page.getByRole('button', { name: 'save' }).click()
 }
 
-const createBlog = async (page, title='default Title', author='default Author', url='default url') => {
+const createBlog = async (page, title = 'default Title', author = 'default Author', url = 'default url') => {
   await page.getByRole('button', { name: 'create new blog' }).click()
   await page.getByPlaceholder('write blog title here').fill(title)
   await page.getByPlaceholder('write blog author here').fill(author)
   await page.getByPlaceholder('write blog url here').fill(url)
-  await page.getByRole('button',{name:'create'}).click()
+  await page.getByRole('button', { name: 'create' }).click()
 }
 
-export { loginWith, createNote, createBlog }
+export {
+  loginWith,
+  createNote,
+  createBlog,
+}
