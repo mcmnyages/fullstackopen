@@ -1,4 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
+const { loginWith, createBlog } = require('./helper')
 
 describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
@@ -19,17 +20,23 @@ describe('Blog app', () => {
         await expect(page.getByText('Log in to application')).toBeVisible();
     })
 
-    test('user can login', async ({ page }) => {
-        await page.getByLabel('username').fill('testuser')
-        await page.getByLabel('password').fill('password')
-        await page.getByRole('button', { name: 'login' }).click()
-        await expect(page.getByText('Test User logged in')).toBeVisible()
+    describe('Login', () => {
+        test('succeeds with correct credentials', async ({ page }) => {
+            await loginWith(page, 'testuser', 'password')
+            await expect(page.getByText('Test User logged in')).toBeVisible()
+        })
+
+        test('fails with wrong credentials', async ({ page }) => {
+            await loginWith(page, 'testuser', 'wrongpass')
+            await expect(page.getByText('Wrong username or password')).toBeVisible()
+        })
     })
 
-    test('login fails with wrong username or password', async ({ page }) => {
-        await page.getByLabel('username').fill('testuser')
-        await page.getByLabel('password').fill('wrong')
-        await page.getByRole('button', { name: 'login' }).click()
-        await expect(page.getByText('Wrong username or password')).toBeVisible()
+    describe('When logged in', () => {
+        test('a new blog can be created', async ({ page }) => {
+            await loginWith(page, 'testuser', 'password')
+            await createBlog(page, 'New Blog by Playwright', 'Test User', 'www.myurl.com')
+            await expect(page.getByText('New Blog by Playwright',{exact:true})).toBeVisible()
+        })
     })
 })
