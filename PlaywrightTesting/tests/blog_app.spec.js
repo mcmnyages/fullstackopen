@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginWith, createBlog} = require('./helper')
+const { loginWith, createBlog } = require('./helper')
 
 describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
@@ -47,6 +47,20 @@ describe('Blog app', () => {
             await expect(page.getByText('likes 0')).toBeVisible()
             await page.getByRole('button', { name: 'like' }).click()
             await expect(page.getByText('likes 1')).toBeVisible()
+
+        })
+
+        test('the creator of the blog can delete the blog', async ({ page }) => {
+            await loginWith(page, 'testuser', 'password')
+            await expect(page.getByText('Test User logged in')).toBeVisible()
+            await createBlog(page, 'Blog to be Deleted', 'Test User', 'www.myurl.com')
+            await expect(page.getByText('Blog to be Deleted', { exact: true })).toBeVisible()
+            
+            page.on('dialog',async dialog=>{
+                await dialog.accept()
+            })
+            await page.getByRole('button', { name: 'Delete' }).click()
+            await expect(page.getByText('Blog to be Deleted',{exact:true})).not.toBeVisible()
 
         })
     })
