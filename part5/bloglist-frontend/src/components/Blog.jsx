@@ -2,9 +2,6 @@ import { useState } from 'react'
 
 const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [visible, setVisible] = useState(false)
-  const isOwner= blog.user && blog.user.username === user.username
-  console.log('Owner of the blog',isOwner)
-
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -15,7 +12,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
 
   if (!visible) {
     return (
-      <div style={blogStyle}>
+      <div data-testid="blog" style={blogStyle}>
         <span>{blog.title}</span> {blog.author}
         <button onClick={() => setVisible(true)}>
           view
@@ -30,7 +27,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div data-testid="blog" style={blogStyle}>
       {blog.title} {blog.author}
       <button onClick={() => setVisible(false)}>
         hide
