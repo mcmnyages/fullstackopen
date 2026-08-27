@@ -70,7 +70,8 @@ const App = () => {
   const createBlog = async blogObject => {
     try {
       const returnedBlog = await blogService.create(blogObject)
-      setBlogs(blogs.concat(returnedBlog))
+      const updatedBlogs = await blogService.getAll()
+      setBlogs(updatedBlogs)
       setNotification({
         message: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
         type: 'success'

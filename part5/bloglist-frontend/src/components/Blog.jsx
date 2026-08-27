@@ -2,6 +2,8 @@ import { useState } from 'react'
 
 const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [visible, setVisible] = useState(false)
+  const isOwner= blog.user && blog.user.username === user.username
+  console.log('Owner of the blog',isOwner)
 
   const blogStyle = {
     paddingTop: 10,
