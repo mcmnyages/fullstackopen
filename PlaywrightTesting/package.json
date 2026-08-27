@@ -1,10 +1,10 @@
 {
-  "name": "playrighttesting",
+  "name": "playwrighttesting",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test",
+    "test": "playwright test --project=chromium",
     "test:report": "playwright show-report"
   },
   "author": "@McMnyages",
