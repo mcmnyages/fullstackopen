@@ -195,7 +195,6 @@ describe('Blog app', () => {
                 'Author Three',
                 'https://example.com/three'
             )
-
             await likeBlog(getBlog(page, 'Blog One'), 1)
             await likeBlog(getBlog(page, 'Blog Two'), 3)
             await likeBlog(getBlog(page, 'Blog Three'), 2)
