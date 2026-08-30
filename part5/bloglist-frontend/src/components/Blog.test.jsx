@@ -1,68 +1,103 @@
-import React from 'react'
-import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import {
+  render,
+  screen,
+} from '@testing-library/react'
+import {
+  MemoryRouter,
+  Routes,
+  Route,
+} from 'react-router-dom'
+import { expect, test, vi } from 'vitest'
 import Blog from './Blog'
 
-test('renders content', () => {
-  const blog = {
-    title: 'Component testing is done with react-testing-library',
-    author: 'Full Stack Open Student',
-    url: 'https://fullstackopen.com/',
-    likes: 5
-  }
-  render(<Blog blog={blog} />)
-  const titleElement = screen.getByText(
-    'Component testing is done with react-testing-library'
+const blog = {
+  id: '123',
+  title: 'React testing',
+  author: 'John Doe',
+  url: 'https://example.com',
+  likes: 10,
+  user: {
+    username: 'johndoe',
+    name: 'John Doe',
+  },
+}
+
+const renderBlog = (user) => {
+  render(
+    <MemoryRouter initialEntries={['/blogs/123']}>
+      <Routes>
+        <Route
+          path="/blogs/:id"
+          element={
+            <Blog
+              blogs={[blog]}
+              user={user}
+              likeBlog={vi.fn()}
+              deleteBlog={vi.fn()}
+            />
+          }
+        />
+      </Routes>
+    </MemoryRouter>
   )
-  expect(titleElement).toBeDefined()
-  const authorElement = screen.getByText('Full Stack Open Student')
-  expect(authorElement).toBeDefined()
-  const urlElement = screen.queryByText('https://fullstackopen.com/')
-  expect(urlElement).toBeNull()
+}
 
-  const likesElement = screen.queryByText('5')
-  expect(likesElement).toBeNull()
-})
+test('unauthenticated user sees blog information but no buttons', () => {
+  renderBlog(null)
 
-test('renders URL and number of likes when the view button is clicked', async () => {
-  const blog = {
-    title: 'Component testing is done with react-testing-library',
-    author: 'Full Stack Open Student',
-    url: 'https://fullstackopen.com/',
-    likes: 5
-  }
+  expect(
+    screen.getByText('React testing')
+  ).toBeDefined()
 
-  render(<Blog blog={blog} />)
-  const user = userEvent.setup()
-  const button = screen.getByText('view')
-  await user.click(button)
-  const urlElement = screen.getByText('https://fullstackopen.com/')
-  expect(urlElement).toBeDefined()
+  expect(
+    screen.getByText('10 likes')
+  ).toBeDefined()
 
-  const likesElement = screen.findByText('5')
-  expect(likesElement).toBeDefined()
+  expect(
+    screen.queryByText('like')
+  ).toBeNull()
+
+  expect(
+    screen.queryByText('delete')
+  ).toBeNull()
 })
 
 
-test('if the like button is clicked twice, the event handler is called twice', async () => {
-  const blog = {
-    title: 'Component testing is done with react-testing-library',
-    author: 'Full Stack Open Student',
-    url: 'https://fullstackopen.com/',
-    likes: 5
+test('authenticated user who is not the creator sees like button but not delete button', () => {
+  const user = {
+    username: 'someoneelse',
+    name: 'Someone Else',
   }
-  const mockHandler = vi.fn()
 
-  render(<Blog blog={blog} updateBlog={mockHandler} />)
+  renderBlog(user)
 
-  const user = userEvent.setup()
-  const viewButton = screen.getByText('view')
-  await user.click(viewButton)
+  expect(
+    screen.getByText('React testing')
+  ).toBeDefined()
 
-  const likeButton = screen.getByText('like')
-  await user.click(likeButton)
-  await user.click(likeButton)
+  expect(
+    screen.getByText('like')
+  ).toBeDefined()
 
-  expect(mockHandler.mock.calls).toHaveLength(2)
+  expect(
+    screen.queryByText('delete')
+  ).toBeNull()
+})
+
+
+test('blog creator sees both like and delete buttons', () => {
+  const user = {
+    username: 'johndoe',
+    name: 'John Doe',
+  }
+
+  renderBlog(user)
+
+  expect(
+    screen.getByText('like')
+  ).toBeDefined()
+
+  expect(
+    screen.getByText('delete')
+  ).toBeDefined()
 })
