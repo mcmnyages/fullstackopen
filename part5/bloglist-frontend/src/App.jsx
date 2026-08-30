@@ -111,6 +111,7 @@ const App = () => {
     } catch (error) {
       showNotification(
         'wrong username or password',
+        'error',
         error
       )
 
@@ -127,8 +128,9 @@ const App = () => {
   const addBlog = async blogObject => {
     try {
       const returnedBlog = await blogService.create(blogObject)
+      const updatedBlogs = await blogService.getAll()
 
-      setBlogs(blogs.concat(returnedBlog))
+      setBlogs(updatedBlogs)
 
       showNotification(
         `a new blog "${returnedBlog.title}" was added`
@@ -150,27 +152,23 @@ const App = () => {
       ...blog,
       likes: blog.likes + 1,
     }
-
     const returnedBlog = await blogService.updateBlog(
       blog.id,
       updatedBlog
     )
-
-    setBlogs(
-      blogs.map(blog =>
-        blog.id === returnedBlog.id
-          ? returnedBlog
-          : blog
-      )
+    const updatedBlogs = await blogService.getAll()
+    setBlogs(updatedBlogs)
+    showNotification(
+      `Updated blog ${returnedBlog.title} updated successfully`,
+      'success'
     )
   }
 
   const deleteBlog = async id => {
-    await blogService.remove(id)
+    await blogService.deleteBlog(id)
 
-    setBlogs(
-      blogs.filter(blog => blog.id !== id)
-    )
+    const updatedBlogs = await blogService.getAll()
+    setBlogs(updatedBlogs)
   }
 
   return (

@@ -42,6 +42,7 @@ const Blog = ({
     user &&
     blog.user &&
     blog.user.username === user.username
+  console.log('Creator', isCreator)
 
   return (
     <div>
