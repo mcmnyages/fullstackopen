@@ -1,55 +1,77 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = ({ addBlog }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const addBlog = event => {
+  const navigate = useNavigate()
+
+  const handleSubmit = async event => {
     event.preventDefault()
 
-    createBlog({
+    const newBlog = {
       title,
       author,
-      url
-    })
+      url,
+    }
+
+    await addBlog(newBlog)
 
     setTitle('')
     setAuthor('')
     setUrl('')
+
+    navigate('/')
   }
 
   return (
-    <form onSubmit={addBlog}>
-      <div>
-        title
-        <input
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-          placeholder='write blog title here'
-        />
-      </div>
+    <div>
+      <h2>create a new blog</h2>
 
-      <div>
-        author
-        <input
-          value={author}
-          onChange={({ target }) => setAuthor(target.value)}
-          placeholder='write blog author here'
-        />
-      </div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>
+            title
+            <input
+              value={title}
+              onChange={event =>
+                setTitle(event.target.value)
+              }
+            />
+          </label>
+        </div>
 
-      <div>
-        url
-        <input
-          value={url}
-          onChange={({ target }) => setUrl(target.value)}
-          placeholder='write blog url here'
-        />
-      </div>
+        <div>
+          <label>
+            author
+            <input
+              value={author}
+              onChange={event =>
+                setAuthor(event.target.value)
+              }
+            />
+          </label>
+        </div>
 
-      <button type="submit">create</button>
-    </form>
+        <div>
+          <label>
+            url
+            <input
+              value={url}
+              onChange={event =>
+                setUrl(event.target.value)
+              }
+            />
+          </label>
+        </div>
+
+        <button type="submit">
+          create
+        </button>
+      </form>
+    </div>
   )
 }
 

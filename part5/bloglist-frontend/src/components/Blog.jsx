@@ -1,52 +1,79 @@
-import { useState } from 'react'
+import {
+  useParams,
+  useNavigate,
+} from 'react-router-dom'
 
-const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
-  const [visible, setVisible] = useState(false)
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
+const Blog = ({
+  blogs,
+  user,
+  likeBlog,
+  deleteBlog,
+}) => {
+  const id = useParams().id
+  const navigate = useNavigate()
+
+  const blog = blogs.find(
+    blog => blog.id === id
+  )
+
+  if (!blog) {
+    return null
   }
 
-  if (!visible) {
-    return (
-      <div data-testid="blog" style={blogStyle}>
-        <span>{blog.title}</span> {blog.author}
-        <button onClick={() => setVisible(true)}>
-          view
-        </button>
-        {blog.user && blog.user.username === user.username && (
-          <button onClick={() => deleteBlog(blog)} style={{ backgroundColor: 'red' }}>
-            Delete
-          </button>
-        )}
-      </div>
+  const handleLike = () => {
+    likeBlog(blog)
+  }
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      `Delete blog "${blog.title}"?`
     )
+
+    if (!confirmed) {
+      return
+    }
+
+    await deleteBlog(blog.id)
+
+    navigate('/')
   }
+
+  const isCreator =
+    user &&
+    blog.user &&
+    blog.user.username === user.username
 
   return (
-    <div data-testid="blog" style={blogStyle}>
-      {blog.title} {blog.author}
-      <button onClick={() => setVisible(false)}>
-        hide
-      </button>
+    <div>
+      <h2>{blog.title}</h2>
+
       <div>
-        {blog.url}
+        <a
+          href={blog.url}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {blog.url}
+        </a>
       </div>
+
       <div>
-        likes {blog.likes}
-        <button onClick={() => updateBlog(blog)}>
+        {blog.likes} likes
+      </div>
+
+      {user && (
+        <button onClick={handleLike}>
           like
         </button>
-      </div>
+      )}
+
       <div>
-        added by {blog.user?.name}
+        added by {blog.author}
       </div>
-      {blog.user && blog.user.username === user.username && (
-        <button onClick={() => deleteBlog(blog)} style={{ backgroundColor: 'red' }}>
-          Delete
+
+      {isCreator && (
+        <button onClick={handleDelete}>
+          delete
         </button>
       )}
     </div>
