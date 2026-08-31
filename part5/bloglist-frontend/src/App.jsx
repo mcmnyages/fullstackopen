@@ -16,6 +16,13 @@ import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Typography
+} from '@mui/material'
+
 
 
 const Navigation = ({ user, logout }) => {
@@ -27,31 +34,49 @@ const Navigation = ({ user, logout }) => {
   }
 
   return (
-    <div>
-      <Link to="/" style={{ marginRight: 10 }}>
-        blogs
-      </Link>
+    <AppBar position="static">
+      <Toolbar>
+        <Button color="inherit" component={Link} to="/">
+          Blogs
+        </Button>
+        <Button color="inherit" component={Link} to="/users">
+          Users
+        </Button>
 
-      {user ? (
-        <>
-          <Link to="/create" style={{ marginRight: 10 }}>
-            create
-          </Link>
+        {user && (
+          <Button color="inherit" component={Link} to="/create">
+            Create
+          </Button>
+        )}
 
-          <span style={{ marginRight: 10 }}>
-            {user.name} logged in
-          </span>
+        <Typography sx={{ flexGrow: 1 }} />
 
-          <button onClick={handleLogout}>
-            logout
-          </button>
-        </>
-      ) : (
-        <Link to="/login">
-          login
-        </Link>
-      )}
-    </div>
+        {user ? (
+          <>
+            <Typography sx={{ mr: 2 }}>
+              {user.name} logged in
+            </Typography>
+            <Button
+              color="inherit"
+              sx={{
+                color: 'error.contrastText',
+                backgroundColor: 'error.main',
+                '&:hover': {
+                  backgroundColor: 'error.dark',
+                }
+              }}
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </>
+        ) : (
+          <Button color="inherit" component={Link} to="/login">
+            Login
+          </Button>
+        )}
+      </Toolbar>
+    </AppBar>
   )
 }
 

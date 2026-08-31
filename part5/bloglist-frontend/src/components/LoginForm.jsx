@@ -1,5 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import {
+  TextField,
+  Button,
+  Box,
+  Typography
+} from '@mui/material'
+
 
 const LoginForm = ({ login }) => {
   const [username, setUsername] = useState('')
@@ -21,41 +28,42 @@ const LoginForm = ({ login }) => {
   }
 
   return (
-    <div>
-      <h2>login</h2>
+    <Box
+      component="form"
+      onSubmit={handleLogin}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        maxWidth: 400
+      }}
+    >
+      <Typography variant="h5">
+        Log in to application
+      </Typography>
 
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>
-            username
-            <input
-              value={username}
-              onChange={event =>
-                setUsername(event.target.value)
-              }
-            />
-          </label>
-        </div>
+      <TextField
+        label="Username"
+        value={username}
+        onChange={({ target }) => setUsername(target.value)}
+      />
 
-        <div>
-          <label>
-            password
-            <input
-              type="password"
-              value={password}
-              onChange={event =>
-                setPassword(event.target.value)
-              }
-            />
-          </label>
-        </div>
+      <TextField
+        label="Password"
+        type="password"
+        value={password}
+        onChange={({ target }) => setPassword(target.value)}
+      />
 
-        <button type="submit">
-          login
-        </button>
-      </form>
-    </div>
+      <Button
+        type="submit"
+        variant="contained"
+      >
+        Login
+      </Button>
+    </Box>
   )
+
 }
 
 export default LoginForm

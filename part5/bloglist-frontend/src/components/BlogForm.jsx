@@ -1,5 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import {
+  TextField,
+  Button,
+  Box,
+  Typography
+} from '@mui/material'
+
 
 const BlogForm = ({ addBlog }) => {
   const [title, setTitle] = useState('')
@@ -28,49 +35,46 @@ const BlogForm = ({ addBlog }) => {
 
   return (
     <div>
-      <h2>create a new blog</h2>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+          maxWidth: 500
+        }}
+      >
+        <Typography variant="h5">
+          Create new blog
+        </Typography>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            title
-            <input
-              value={title}
-              onChange={event =>
-                setTitle(event.target.value)
-              }
-            />
-          </label>
-        </div>
+        <TextField
+          label="Title"
+          value={title}
+          onChange={({ target }) => setTitle(target.value)}
+        />
 
-        <div>
-          <label>
-            author
-            <input
-              value={author}
-              onChange={event =>
-                setAuthor(event.target.value)
-              }
-            />
-          </label>
-        </div>
+        <TextField
+          label="Author"
+          value={author}
+          onChange={({ target }) => setAuthor(target.value)}
+        />
 
-        <div>
-          <label>
-            url
-            <input
-              value={url}
-              onChange={event =>
-                setUrl(event.target.value)
-              }
-            />
-          </label>
-        </div>
+        <TextField
+          label="URL"
+          value={url}
+          onChange={({ target }) => setUrl(target.value)}
+        />
 
-        <button type="submit">
-          create
-        </button>
-      </form>
+        <Button
+          type="submit"
+          variant="contained"
+        >
+          Create
+        </Button>
+      </Box>
+
     </div>
   )
 }
