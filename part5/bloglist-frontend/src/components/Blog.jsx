@@ -2,13 +2,16 @@ import {
   useParams,
   useNavigate,
 } from 'react-router-dom'
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Box,
+  Divider,
+} from '@mui/material'
 
-const Blog = ({
-  blogs,
-  user,
-  likeBlog,
-  deleteBlog,
-}) => {
+const Blog = ({ blogs, user, likeBlog, deleteBlog }) => {
   const id = useParams().id
   const navigate = useNavigate()
 
@@ -42,42 +45,77 @@ const Blog = ({
     user &&
     blog.user &&
     blog.user.username === user.username
-  console.log('Creator', isCreator)
 
   return (
-    <div>
-      <h2>{blog.title}</h2>
-
-      <div>
-        <a
+    <Card
+      sx={{
+        maxWidth: 700,
+        mb: 3,
+        mt: 3,
+      }}
+    >
+      <CardContent>
+        <Typography
+          variant="h4"
+          gutterBottom
+        >
+          {blog.title}
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          color="text.secondary"
+          gutterBottom
+        >
+          by {blog.author}
+        </Typography>
+        <Typography
+          component="a"
           href={blog.url}
           target="_blank"
           rel="noreferrer"
+          sx={{
+            display: 'block',
+            mb: 2,
+          }}
         >
           {blog.url}
-        </a>
-      </div>
-
-      <div>
-        {blog.likes} likes
-      </div>
-
-      {user && (
-        <button onClick={handleLike}>
-          like
-        </button>
-      )}
-
-      <div>
-        added by {blog.author}
-      </div>
-
-      {isCreator && (
-        <button onClick={handleDelete}>
-          delete
-        </button>
-      )}
-    </div>
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+        >
+          Added by {blog.user.name}
+        </Typography>
+        <Divider sx={{ mb: 2 }} />
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+            mb: 2,
+          }}
+        >
+          <Typography>
+            Likes: {blog.likes}
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={handleLike}
+          >
+            Like
+          </Button>
+          {isCreator && (
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleDelete}
+            >
+              Remove
+            </Button>
+          )}
+        </Box>
+      </CardContent>
+    </Card>
   )
 }
 
