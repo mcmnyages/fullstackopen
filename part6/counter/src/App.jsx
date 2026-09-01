@@ -1,16 +1,13 @@
- import { useState } from "react"
+import Display from './Display'
+import Controls from './Controls'
 
- const App =()=>{
-  const [count, setCount]=useState(0)
-
-  return(
+const App = () => {
+  return (
     <div>
-      <h1>{count}</h1>
-      <button onClick={()=>setCount(count+1)}>plus</button>
-      <button onClick={()=>setCount(count-1)}>minus</button>
-      <button onClick={()=>setCount(0)}>zero</button>
+      <Display />
+      <Controls />
     </div>
   )
+}
 
- }
- export default App
+export default App
