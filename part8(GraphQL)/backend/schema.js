@@ -44,6 +44,7 @@ type Token {
       city: String!
     ): Person
     editNumber(name: String!, phone: String!): Person
+    addAsFriend(name: String!): User
   }
 `
 
