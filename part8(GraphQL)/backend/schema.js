@@ -1,10 +1,16 @@
 const typeDefs = /* GraphQL */ `
 
+type Subscription {
+  personAdded: Person!
+}    
+
+
 type User {
   username: String!
   friends: [Person!]!
   id: ID!
 }
+
 
 type Token {
   value: String!
@@ -20,6 +26,7 @@ type Token {
     phone: String
     address: Address!
     id: ID!
+    friendOf: [User!]!
   }
 
   enum YesNo {
@@ -46,6 +53,8 @@ type Token {
     editNumber(name: String!, phone: String!): Person
     addAsFriend(name: String!): User
   }
+  
 `
+
 
 module.exports = typeDefs

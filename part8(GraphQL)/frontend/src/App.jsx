@@ -1,12 +1,14 @@
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client/react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
-import { ALL_PERSONS } from './queries'
+import { ALL_PERSONS, PERSON_ADDED } from './queries'
 import Notify from './components/Notify'
 import PhoneForm from './components/PhoneForm'
 import LoginForm from './components/LoginForm'
+import { addPersonToCache } from './utils/apolloCache'
+
 
 
 const App = () => {
@@ -15,6 +17,14 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(localStorage.getItem('phonebook-user-token'))
   const client = useApolloClient()
+
+ useSubscription(PERSON_ADDED, {
+    onData: ({ data }) => {
+      const addedPerson = data.data.personAdded
+      notify(`${addedPerson.name} added`)
+       addPersonToCache(client.cache, addedPerson)
+    }
+  })
 
   const onLogout = () => {
     setToken(null)
