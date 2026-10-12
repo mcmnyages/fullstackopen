@@ -14,7 +14,8 @@
     "expo-constants": "~55.0.17",
     "expo-status-bar": "~55.0.6",
     "react": "19.2.0",
-    "react-native": "0.83.10"
+    "react-native": "0.83.10",
+    "react-router-native": "^6.30.6"
   },
   "private": true,
   "devDependencies": {
