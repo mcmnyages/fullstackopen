@@ -1,5 +1,8 @@
-import { View, TextInput, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
+import * as yup from 'yup';
+
+import FormikTextInput from './FormikTextInput';
 import Text from './Text';
 import theme from '../theme';
 
@@ -7,15 +10,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.white,
     padding: 15,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#aab2bb',
-    borderRadius: 4,
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    fontSize: theme.fontSizes.body,
   },
   button: {
     backgroundColor: theme.colors.primary,
@@ -30,25 +24,28 @@ const initialValues = {
   password: '',
 };
 
+const validationSchema = yup.object().shape({
+  username: yup.string().required('Username is required'),
+  password: yup.string().required('Password is required'),
+});
+
 const SignInForm = ({ onSubmit }) => {
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
-      {({ handleChange, handleBlur, handleSubmit, values }) => (
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+    >
+      {({ handleSubmit }) => (
         <View style={styles.container}>
-          <TextInput
-            style={styles.input}
+          <FormikTextInput
+            name="username"
             placeholder="Username"
-            value={values.username}
-            onChangeText={handleChange('username')}
-            onBlur={handleBlur('username')}
             autoCapitalize="none"
           />
-          <TextInput
-            style={styles.input}
+          <FormikTextInput
+            name="password"
             placeholder="Password"
-            value={values.password}
-            onChangeText={handleChange('password')}
-            onBlur={handleBlur('password')}
             secureTextEntry
           />
           <Pressable style={styles.button} onPress={handleSubmit}>
