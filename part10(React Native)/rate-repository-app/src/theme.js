@@ -3,6 +3,9 @@ const theme = {
     textPrimary: '#24292e',
     textSecondary: '#586069',
     primary: '#0366d6',
+    appBarBackground: '#24292e',
+    mainBackground: '#e1e4e8',
+    white: '#ffffff',
   },
   fontSizes: {
     body: 14,
