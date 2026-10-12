@@ -7,12 +7,11 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
     backgroundColor: theme.colors.appBarBackground,
-    paddingBottom: 15,
-    paddingLeft: 10,
-    flexDirection: 'row',
   },
   scrollView: {
     flexDirection: 'row',
+    paddingHorizontal: 10,
+    paddingBottom: 15,
   },
 });
 
