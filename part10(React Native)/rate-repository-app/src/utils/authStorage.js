@@ -24,5 +24,4 @@ class AuthStorage {
   }
 }
 
-// Export an instance instead of the raw class constructor
-export default new AuthStorage();
+export default AuthStorage;
