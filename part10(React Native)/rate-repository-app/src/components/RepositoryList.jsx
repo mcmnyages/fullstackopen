@@ -1,23 +1,33 @@
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native';
 import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
-
 
 const styles = StyleSheet.create({
   separator: {
     height: 10,
+  },
+  spinner: {
+    padding: 20,
   },
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
-  const { repositories } = useRepositories();
-  
+  const { repositories, loading } = useRepositories();
+
+  if (loading && !repositories) {
+    return (
+      <View style={styles.spinner}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
     : [];
-    
+
   return (
     <FlatList
       data={repositoryNodes}
