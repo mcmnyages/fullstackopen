@@ -21,3 +21,12 @@ query{
   }
 }
 `
+
+export const GET_CURRENT_USER = gql`
+  query getCurrentUser {
+    me {
+      id
+      username
+    }
+  }
+`;
