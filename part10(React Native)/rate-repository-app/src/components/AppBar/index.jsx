@@ -3,11 +3,11 @@ import { useQuery, useApolloClient } from '@apollo/client/react';
 import { useNavigate } from 'react-router-native';
 import Constants from 'expo-constants';
 import AppBarTab from './AppBarTab';
-import theme from '../theme';
-import { GET_CURRENT_USER } from '../graphql/queries';
-import useAuthStorage from '../hooks/useAuthStorage';
+import theme from '../../theme';
+import { GET_CURRENT_USER } from '../../graphql/queries';
+import useAuthStorage from '../../hooks/useAuthStorage';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
-import Text from './Text';
+import Text from '../Text';
 
 const styles = StyleSheet.create({
   container: {

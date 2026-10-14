@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-native';
-import SignInForm from '../components/SignInForm';
-import useSignIn from '../hooks/useSignIn';
+import SignInForm from './SignInForm';
+import useSignIn from '../../hooks/useSignIn';
 
 const SignIn = () => {
   const [signIn, result] = useSignIn();
