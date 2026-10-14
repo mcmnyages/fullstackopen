@@ -1,26 +1,19 @@
+// src/graphql/queries.js
 import { gql } from '@apollo/client';
-
+import { REPOSITORY_FIELDS } from './fragments';
 
 export const GET_REPOSITORIES = gql`
-query{
-  repositories {
-    edges {
-      node {
-        id
-        fullName
-        description
-        language
-        stargazersCount
-        forksCount
-        ownerAvatarUrl
-        ownerName
-        reviewCount
-        ratingAverage
+  query Repositories($orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection) {
+    repositories(orderBy: $orderBy, orderDirection: $orderDirection) {
+      edges {
+        node {
+          ...RepositoryFields
+        }
       }
     }
   }
-}
-`
+  ${REPOSITORY_FIELDS}
+`;
 
 export const GET_CURRENT_USER = gql`
   query getCurrentUser {
@@ -31,20 +24,11 @@ export const GET_CURRENT_USER = gql`
   }
 `;
 
-
 export const GET_REPOSITORY = gql`
   query Repository($id: ID!) {
     repository(id: $id) {
-      id
-      fullName
+      ...RepositoryFields
       url
-      ownerAvatarUrl
-      description
-      language
-      stargazersCount
-      forksCount
-      reviewCount
-      ratingAverage
       reviews {
         edges {
           node {
@@ -61,6 +45,5 @@ export const GET_REPOSITORY = gql`
       }
     }
   }
+  ${REPOSITORY_FIELDS}
 `;
-
-

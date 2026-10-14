@@ -2,18 +2,17 @@ import { useQuery,useMutation } from '@apollo/client/react';
 import { GET_REPOSITORIES, GET_REPOSITORY } from '../graphql/queries';
 import { CREATE_REVIEW } from '../graphql/mutations';
 
-export const useRepositories = () => {
-  const { data, loading, error, refetch } = useQuery(GET_REPOSITORIES, {
+export const useRepositories = (variables) => {
+  const { data, loading, refetch, ...rest } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: 'cache-and-network',
+    variables, // Pass variables like { orderBy, orderDirection } here
   });
 
-  const repositories = data ? data.repositories : undefined;
-
-  return { 
-    repositories, 
+  return {
+    repositories: data ? data.repositories : undefined,
     loading,
-    error, 
-    refetch 
+    refetch,
+    ...rest,
   };
 };
 
