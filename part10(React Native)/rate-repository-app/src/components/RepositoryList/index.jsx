@@ -1,7 +1,9 @@
+// src/components/RepositoryList/index.jsx
 import React, { useState } from 'react';
-import { FlatList, View, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
+import { FlatList, View, StyleSheet, ActivityIndicator, Pressable, TextInput } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import { Picker } from '@react-native-picker/picker';
+import { useDebounce } from 'use-debounce';
 import RepositoryItem from './RepositoryItem';
 import { useRepositories } from '../../hooks/useRepositories';
 
@@ -12,16 +14,33 @@ const styles = StyleSheet.create({
   spinner: {
     padding: 20,
   },
-  pickerContainer: {
+  headerContainer: {
     padding: 10,
+  },
+  searchInput: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    marginBottom: 10,
+  },
+  pickerContainer: {
     backgroundColor: '#e1e4e8',
+    borderRadius: 4,
   },
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-// Add ListHeaderComponent to render the Picker
-export const RepositoryListContainer = ({ repositories, selectedSort, setSelectedSort }) => {
+export const RepositoryListContainer = ({ 
+  repositories, 
+  selectedSort, 
+  setSelectedSort, 
+  searchKeyword, 
+  setSearchKeyword 
+}) => {
   const navigate = useNavigate();
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
@@ -38,26 +57,36 @@ export const RepositoryListContainer = ({ repositories, selectedSort, setSelecte
         </Pressable>
       )}
       ListHeaderComponent={
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={selectedSort}
-            onValueChange={(itemValue) => setSelectedSort(itemValue)}
-          >
-            <Picker.Item label="Latest repositories" value="latest" />
-            <Picker.Item label="Highest rated repositories" value="highest_rated" />
-            <Picker.Item label="Lowest rated repositories" value="lowest_rated" />
-          </Picker>
+        <View style={styles.headerContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search repositories..."
+            value={searchKeyword}
+            onChangeText={(text) => setSearchKeyword(text)}
+          />
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={selectedSort}
+              onValueChange={(itemValue) => setSelectedSort(itemValue)}
+            >
+              <Picker.Item label="Latest repositories" value="latest" />
+              <Picker.Item label="Highest rated repositories" value="highest_rated" />
+              <Picker.Item label="Lowest rated repositories" value="lowest_rated" />
+            </Picker>
+          </View>
         </View>
       }
     />
   );
 };
 
-// Component handling state and side effects
 const RepositoryList = () => {
   const [selectedSort, setSelectedSort] = useState('latest');
+  const [searchKeyword, setSearchKeyword] = useState('');
+  
+  // Debounce searchKeyword by 500ms
+  const [debouncedKeyword] = useDebounce(searchKeyword, 500);
 
-  // Map the selected string value to query variables: orderBy and orderDirection
   const getQueryVariables = () => {
     switch (selectedSort) {
       case 'highest_rated':
@@ -71,7 +100,13 @@ const RepositoryList = () => {
   };
 
   const { orderBy, orderDirection } = getQueryVariables();
-  const { repositories, loading } = useRepositories({ orderBy, orderDirection });
+  
+  // Pass both sorting variables and the debounced search keyword to the hook
+  const { repositories, loading } = useRepositories({ 
+    orderBy, 
+    orderDirection, 
+    searchKeyword: debouncedKeyword 
+  });
 
   if (loading && !repositories) {
     return (
@@ -86,6 +121,8 @@ const RepositoryList = () => {
       repositories={repositories}
       selectedSort={selectedSort}
       setSelectedSort={setSelectedSort}
+      searchKeyword={searchKeyword}
+      setSearchKeyword={setSearchKeyword}
     />
   );
 };
