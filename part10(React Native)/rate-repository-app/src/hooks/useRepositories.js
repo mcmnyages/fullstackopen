@@ -1,5 +1,6 @@
-import { useQuery } from '@apollo/client/react';
+import { useQuery,useMutation } from '@apollo/client/react';
 import { GET_REPOSITORIES, GET_REPOSITORY } from '../graphql/queries';
+import { CREATE_REVIEW } from '../graphql/mutations';
 
 export const useRepositories = () => {
   const { data, loading, error, refetch } = useQuery(GET_REPOSITORIES, {
@@ -30,5 +31,25 @@ export const useRepository = (id) => {
     error,
     refetch,
   };
+};
+
+export const useCreateReview = () => {
+  const [mutate, result] = useMutation(CREATE_REVIEW);
+
+  const createReview = async ({ ownerName, repositoryName, rating, text }) => {
+    const response = await mutate({
+      variables: {
+        review: {
+          ownerName,
+          repositoryName,
+          rating: Number(rating),
+          text,
+        },
+      },
+    });
+    return response;
+  };
+
+  return [createReview, result];
 };
 
