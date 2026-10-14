@@ -32,6 +32,7 @@
   },
   "private": true,
   "devDependencies": {
+    "@testing-library/react-native": "^14.1.0",
     "@types/jest": "29.5.14",
     "eslint": "^9.0.0",
     "eslint-config-expo": "~55.0.1",
