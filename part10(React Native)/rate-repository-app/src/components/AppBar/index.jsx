@@ -1,4 +1,4 @@
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, Pressable } from 'react-native';
 import { useQuery, useApolloClient } from '@apollo/client/react';
 import { useNavigate } from 'react-router-native';
 import Constants from 'expo-constants';
@@ -6,7 +6,6 @@ import AppBarTab from './AppBarTab';
 import theme from '../../theme';
 import { GET_CURRENT_USER } from '../../graphql/queries';
 import useAuthStorage from '../../hooks/useAuthStorage';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import Text from '../Text';
 
 const styles = StyleSheet.create({
@@ -44,15 +43,21 @@ const AppBar = () => {
     <View style={styles.container}>
       <ScrollView horizontal style={styles.scrollView}>
         <AppBarTab title="Repositories" to="/" />
-        <AppBarTab title="Create a review" to="/create-review" />
+        
         {currentUser ? (
-          <Pressable onPress={handleSignOut} style={styles.tab}>
-            <Text color="textWhite" fontWeight="bold" fontSize="subheading">
-              Sign out
-            </Text>
-          </Pressable>
+          <>
+            <AppBarTab title="Create a review" to="/create-review" />
+            <Pressable onPress={handleSignOut} style={styles.tab}>
+              <Text color="textWhite" fontWeight="bold" fontSize="subheading">
+                Sign out
+              </Text>
+            </Pressable>
+          </>
         ) : (
-          <AppBarTab title="Sign in" to="/signin" />
+          <>
+            <AppBarTab title="Sign in" to="/signin" />
+            <AppBarTab title="Sign Up" to="/signup" />
+          </>
         )}
       </ScrollView>
     </View>
