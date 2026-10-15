@@ -1,18 +1,16 @@
 import React from 'react';
 import { FlatList, View, Text, StyleSheet, ActivityIndicator, Alert } from 'react-native';
-import { useQuery, useMutation } from '@apollo/client/react';
+import { useMutation } from '@apollo/client/react';
 import { useNavigate } from 'react-router-native';
-import { GET_CURRENT_USER } from '../../../graphql/queries';
 import { DELETE_REVIEW } from '../../../graphql/mutations';
 import ReviewItem from '../../RepositoryList/ReviewItem';
+import useMyReviews from '../../../hooks/useMyReviews';
 
 const MyReviews = () => {
   const navigate = useNavigate();
-  const { data, loading, refetch } = useQuery(GET_CURRENT_USER, {
-    variables: { includeReviews: true },
-    fetchPolicy: 'cache-and-network',
-  });
-
+  const first = 3; 
+  
+  const { reviews, fetchMore, loading, refetch } = useMyReviews({ first });
   const [deleteReview] = useMutation(DELETE_REVIEW);
 
   const handleDelete = (id) => {
@@ -27,7 +25,7 @@ const MyReviews = () => {
           onPress: async () => {
             try {
               await deleteReview({ variables: { id } });
-              refetch(); // Refresh the review list after deletion
+              refetch();
             } catch (e) {
               console.error('Error deleting review:', e);
             }
@@ -39,11 +37,10 @@ const MyReviews = () => {
   };
 
   const handleViewRepository = (repositoryId) => {
-    // Matches your Main router: <Route path="/repository/:id" element={<SingleRepository />} />
     navigate(`/repository/${repositoryId}`);
   };
 
-  if (loading) {
+  if (loading && !reviews) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#0366d6" />
@@ -51,9 +48,9 @@ const MyReviews = () => {
     );
   }
 
-  const reviews = data?.me?.reviews?.edges?.map((edge) => edge.node) ?? [];
+  const reviewNodes = reviews?.edges?.map((edge) => edge.node) ?? [];
 
-  if (reviews.length === 0) {
+  if (reviewNodes.length === 0) {
     return (
       <View style={styles.centered}>
         <Text style={styles.emptyText}>You haven&rsquo;t written any reviews yet.</Text>
@@ -63,7 +60,9 @@ const MyReviews = () => {
 
   return (
     <FlatList
-      data={reviews}
+      data={reviewNodes}
+      onEndReached={fetchMore}
+      onEndReachedThreshold={0.5}
       renderItem={({ item }) => (
         <ReviewItem
           review={item}
