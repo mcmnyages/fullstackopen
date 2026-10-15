@@ -1,16 +1,32 @@
-import { useQuery,useMutation } from '@apollo/client/react';
+import { useQuery, useMutation } from '@apollo/client/react';
 import { GET_REPOSITORIES, GET_REPOSITORY } from '../graphql/queries';
 import { CREATE_REVIEW } from '../graphql/mutations';
 
 export const useRepositories = (variables) => {
-  const { data, loading, refetch, ...rest } = useQuery(GET_REPOSITORIES, {
+  const { data, loading, refetch, fetchMore, ...rest } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: 'cache-and-network',
     variables, // Pass variables like { orderBy, orderDirection } here
   });
 
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      return;
+    }
+
+    fetchMore({
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        ...variables,
+      },
+    });
+  };
+
   return {
     repositories: data ? data.repositories : undefined,
     loading,
+    fetchMore: handleFetchMore,
     refetch,
     ...rest,
   };

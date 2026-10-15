@@ -39,6 +39,7 @@ export const RepositoryListContainer = ({
   selectedSort, 
   setSelectedSort, 
   searchKeyword, 
+  onEndReached,
   setSearchKeyword 
 }) => {
   const navigate = useNavigate();
@@ -49,6 +50,8 @@ export const RepositoryListContainer = ({
   return (
     <FlatList
       data={repositoryNodes}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.5}
       ItemSeparatorComponent={ItemSeparator}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
@@ -102,7 +105,8 @@ const RepositoryList = () => {
   const { orderBy, orderDirection } = getQueryVariables();
   
   // Pass both sorting variables and the debounced search keyword to the hook
-  const { repositories, loading } = useRepositories({ 
+  const { repositories, loading,fetchMore } = useRepositories({ 
+    first:5,
     orderBy, 
     orderDirection, 
     searchKeyword: debouncedKeyword 
@@ -119,6 +123,7 @@ const RepositoryList = () => {
   return (
     <RepositoryListContainer
       repositories={repositories}
+      onEndReached={fetchMore}
       selectedSort={selectedSort}
       setSelectedSort={setSelectedSort}
       searchKeyword={searchKeyword}
