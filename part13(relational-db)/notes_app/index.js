@@ -5,12 +5,15 @@ const app = express()
 app.use(express.json())
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  },
+  dialect: 'postgres',
+  dialectOptions: process.env.NODE_ENV === 'production'
+    ? {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false
+        }
+      }
+    : {}
 });
 
 class Note extends Model {}
@@ -43,10 +46,12 @@ app.get('/api/notes', async (req, res) => {
 })
 
 app.post('/api/notes', async (req, res) => {
-  console.log('hitting the post route')
-  console.log(req.body)
-  const note = await Note.create({...req.body, date: new Date()})
-  res.json(note)
+  try {
+    const note = await Note.create({...req.body, date: new Date()})
+    return res.json(note)
+  } catch(error) {
+    return res.status(400).json({ error })
+  }
 })
 
 const PORT = process.env.PORT || 3001
