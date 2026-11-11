@@ -1,11 +1,11 @@
 ### GET NOTES ###
-http://localhost:3001/api/notes
+ GET http://localhost:3001/api/notes
 
 ### CREATE A NOTE ###
-http://localhost:3001/api/notes
-
+POST http://localhost:3001/api/notes
 Content-Type: application/json
+
 {
-    "content":"Creating a new note",
-    "important":false
+    "content":"Another note",
+    "important":true
 }
