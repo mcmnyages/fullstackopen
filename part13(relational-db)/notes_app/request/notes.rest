@@ -1,11 +1,15 @@
+
 ### GET NOTES ###
- GET http://localhost:3001/api/notes
+GET  http://localhost:3001/api/notes
 
 ### CREATE A NOTE ###
 POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content":"Another note",
+    "content":"I am using postgress which is a relatiinal database",
     "important":true
 }
+
+### GET A SPECIFIC NOTE ###
+GET  http://localhost:3001/api/notes/1
