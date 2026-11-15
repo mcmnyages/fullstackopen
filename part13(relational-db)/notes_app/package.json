@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "cross-env NODE_ENV=production nodemon index.js",
+    "migration:down": "node util/rollback.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "@McMnyages",
@@ -16,5 +18,8 @@
     "pg": "^8.23.1",
     "sequelize": "^6.37.8",
     "umzug": "^3.8.3"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
   }
 }
