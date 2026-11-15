@@ -5,10 +5,10 @@ GET  http://localhost:3001/api/notes
 ### CREATE A NOTE ###
 POST http://localhost:3001/api/notes
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5vcmFoIiwiaWQiOjIsImlhdCI6MTc5NDU4NzYyMX0.N0ruItJsj3mUqtDaykFhKahzmvogW_byh7IsA_pU4-g
+Authorization: Bearer 
 
 {
-    "content":"It is from Norah",
+    "content":"It is from Norah again",
     "important":true
 }
 
@@ -21,8 +21,8 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "name":"Norah Aurora",
-    "username":"norah"
+    "name":"James Bond",
+    "username":"jbond"
 }
 
 ### GET ALL USERS ###
@@ -36,6 +36,16 @@ POST http://localhost:3001/api/login
 Content-Type: application/json
 
 {
-    "username":"norah",
+    "username":"jbond",
     "password":"secret"
+}
+
+
+### ADMIN:CHANGE STATUS OF A USER ###
+PUT http://localhost:3001/api/users/jbond
+Content-Type: application/json
+Authorization: Bearer 
+
+{
+    "disabled": false
 }
