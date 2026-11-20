@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { getNotes } from "../services/notes"
 
+export const instant=false
+
 const Notes = async ({
   searchParams,
 }: {
