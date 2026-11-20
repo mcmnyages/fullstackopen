@@ -4,22 +4,18 @@ import { notes } from "../../db/schema"
 
 export const getNotes = async (importantOnly: boolean) => {
   if (importantOnly) {
-    return db.query.notes.findMany({
-      where: eq(notes.important, true),
-    })
+    return db.select().from(notes).where(eq(notes.important, true))
   }
-  
-  return db.query.notes.findMany()
+  return db.select().from(notes)
 }
 
 export const getNoteById = async (id: number) => {
-  return db.query.notes.findFirst({
-    where: eq(notes.id, id),
-  })
+  const result = await db.select().from(notes).where(eq(notes.id, id))
+  return result[0]
 }
 
-export const addNote = async (content: string, important: boolean) => {
-  await db.insert(notes).values({ content, important })
+export const addNote = async (content: string, important: boolean, userId: number) => {
+  await db.insert(notes).values({ content, important, userId })
 }
 
 export const toggleImportance = async (id: number) => {
