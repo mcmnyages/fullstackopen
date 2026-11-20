@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import { db } from "../../db"
 import { notes } from "../../db/schema"
 
@@ -14,8 +14,16 @@ export const getNoteById = async (id: number) => {
   return result[0]
 }
 
-export const addNote = async (content: string, important: boolean, userId: number) => {
-  await db.insert(notes).values({ content, important, userId })
+export const addNote = async (content: string, important: boolean) => {
+  const user = await db.query.users.findFirst({
+    orderBy: sql`RANDOM()`,
+  })
+
+  if (!user) {
+    throw new Error("No user found")
+  }
+
+  await db.insert(notes).values({ content, important, userId: user.id })
 }
 
 export const toggleImportance = async (id: number) => {

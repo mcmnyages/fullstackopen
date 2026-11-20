@@ -12,8 +12,9 @@ export const getUserById = async (id: number) => {
   })
 }
 
-export const getNotesByUserId = async (userId: number) => {
-  return db.query.notes.findMany({
-    where: eq(notes.userId, userId),
+export const getUserWithNotes = async (id: number) => {
+  return db.query.users.findFirst({
+    where: eq(users.id, id),
+    with: { notes: true },
   })
 }
