@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache"
 import { auth } from "@/auth"
 
 export const createNote = async (
-  prevState: { error: string },
+  prevState: { error: string; success?: boolean },
   formData: FormData,
 ) => {
   const session = await auth()
@@ -16,14 +16,17 @@ export const createNote = async (
 
   const content = formData.get("content") as string
   if (!content || content.length < 10) {
-    return { error: "Note content must be at least 10 characters long" }
+    return {
+      error: "Note content must be at least 10 characters long",
+      success: false,
+    }
   }
   const important = formData.get("important") === "on"
   await addNote(content, important)
 
   revalidatePath("/notes")
-  redirect("/notes")
-}
+  return { error: "", success: true }
+}  
 
 export const toggleNoteImportance = async (formData: FormData) => {
   const id = Number(formData.get("id"))
